@@ -1,0 +1,37 @@
+﻿@page "/fetchdata"
+@inject SampleDataAccess data
+
+<PageTitle>Employee Directory</PageTitle>
+
+@using MemoryCacheDemo.Data
+@inject WeatherForecastService ForecastService
+
+<h1>Employee Directory</h1>
+
+@if(employees is not null)
+{
+    <ul class="list-group w-25 mt-4">
+        @foreach(var e in employees)
+        {
+            <li class="list-group-item">@e.FirstName @e.LastName</li>
+        }
+    </ul>
+}
+else
+{
+    <h3>Loading...</h3>
+}
+
+@code {
+    List<EmployeeModel> employees;
+
+    //protected override void OnInitialized()
+    //{
+    //    employees = data.GetEmployees();
+    //}
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = await data.GetEmployeesCache();
+    }
+}
